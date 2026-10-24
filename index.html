@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ABC Bank — Simple & Minimalist Banking</title>
+  <meta name="description" content="A clean, simple, and distraction-free banking application.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- 1. SIMPLE LOGIN SCREEN -->
+  <div id="login-screen" class="login-wrapper">
+    <div class="login-card">
+      <div class="login-header">
+        <div class="login-brand">
+          <div class="brand-logo">ABC</div>
+          <span class="brand-name">ABC Bank</span>
+        </div>
+        <h1 class="login-title">Sign in to account</h1>
+        <p class="login-subtitle">Enter your details to access your dashboard</p>
+      </div>
+
+      <form id="login-form" autocomplete="off">
+        <div class="form-group">
+          <label for="login-username" class="form-label">Full Name or Email</label>
+          <input
+            type="text"
+            id="login-username"
+            class="form-input"
+            value="Alex Morgan"
+            placeholder="e.g. Alex Morgan"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="login-password" class="form-label">Password</label>
+          <input
+            type="password"
+            id="login-password"
+            class="form-input"
+            value="••••••••"
+            placeholder="Password"
+            required
+          >
+        </div>
+
+        <button type="submit" class="submit-btn">Access Account</button>
+        <p class="login-hint">Demo account prefilled. Click above to sign in.</p>
+        <div style="margin-top: 18px; text-align: center;">
+          <a href="https://github.com/IFTE-13/ABC-Bank" target="_blank" rel="noopener noreferrer" class="github-btn" title="View Source on GitHub">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+            </svg>
+            <span>GitHub Repository</span>
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 2. MAIN DASHBOARD (Side-by-side, No page scrolling) -->
+  <div id="dashboard-screen" class="app-container hidden">
+    <!-- Top Header -->
+    <header class="app-header">
+      <div class="brand">
+        <div class="brand-logo">ABC</div>
+        <span class="brand-name">ABC Bank</span>
+      </div>
+      <div class="header-user-section">
+        <a href="https://github.com/IFTE-13/ABC-Bank" target="_blank" rel="noopener noreferrer" class="github-btn" title="View Source on GitHub">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          <span>GitHub</span>
+        </a>
+        <div class="user-badge"><span id="header-user-name">Alex Morgan</span> • •••• 1240</div>
+        <button type="button" id="logout-btn" class="logout-btn">Sign Out</button>
+      </div>
+    </header>
+
+    <!-- Main Dashboard Body -->
+    <main class="dashboard-grid">
+      <!-- TOP ROW: Balance Overview + Visual User Data Card -->
+      <section class="top-row-grid">
+        <!-- Balance Summary -->
+        <div class="balance-card">
+          <div>
+            <div class="balance-label">Total Balance</div>
+            <div class="balance-amount" id="balance-display">$0.00</div>
+          </div>
+          
+          <div class="balance-stats">
+            <div class="stat-item">
+              <span class="stat-label">Total Inflow</span>
+              <span class="stat-value stat-income" id="total-deposit-display">+$0.00</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Total Outflow</span>
+              <span class="stat-value stat-expense" id="total-withdraw-display">-$0.00</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Visual User Data Card -->
+        <div class="user-card" aria-label="Visual user account card">
+          <div class="card-top">
+            <span class="card-bank-name">ABC Platinum</span>
+            <div class="user-badge" style="background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.15); color: #fff;">DEBIT</div>
+          </div>
+
+          <div class="card-chip-container">
+            <div class="card-chip"></div>
+            <svg class="card-contactless" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M8.5 16.5a5 5 0 0 1 0-9"></path>
+              <path d="M12 19a8.5 8.5 0 0 0 0-14"></path>
+              <path d="M15.5 21.5a12 12 0 0 0 0-19"></path>
+            </svg>
+          </div>
+
+          <div class="card-number">4291 •••• •••• 1240</div>
+
+          <div class="card-bottom">
+            <div class="card-holder">
+              <span class="card-meta-label">Cardholder</span>
+              <span class="card-holder-name" id="card-holder-name">ALEX MORGAN</span>
+            </div>
+            <div class="card-expiry">
+              <span class="card-meta-label">Expires</span>
+              <span class="card-expiry-val">08/29</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- BOTTOM ROW: Side-by-Side (Deposit/Withdraw + Recent Activity) -->
+      <section class="bottom-row-grid">
+        <!-- Left: Action Box (Deposit / Withdraw) -->
+        <div class="action-card">
+          <div class="segmented-control" role="tablist">
+            <button type="button" class="segment-btn active" id="tab-deposit" role="tab" aria-selected="true">Deposit</button>
+            <button type="button" class="segment-btn" id="tab-withdraw" role="tab" aria-selected="false">Withdraw</button>
+          </div>
+
+          <form id="transaction-form" autocomplete="off">
+            <div class="form-group">
+              <label for="amount-input" class="form-label">Amount</label>
+              <div class="input-wrapper">
+                <span class="currency-prefix">$</span>
+                <input
+                  type="number"
+                  id="amount-input"
+                  class="form-input has-prefix"
+                  step="0.01"
+                  min="0.01"
+                  placeholder="0.00"
+                  required
+                >
+              </div>
+              <div class="quick-amounts">
+                <button type="button" class="chip-btn" data-amount="20">+ $20</button>
+                <button type="button" class="chip-btn" data-amount="50">+ $50</button>
+                <button type="button" class="chip-btn" data-amount="100">+ $100</button>
+                <button type="button" class="chip-btn" data-amount="500">+ $500</button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="note-input" class="form-label">Note / Description (Optional)</label>
+              <input
+                type="text"
+                id="note-input"
+                class="form-input"
+                maxlength="40"
+                placeholder="e.g. Salary, Utilities, Dining..."
+              >
+            </div>
+
+            <button type="submit" id="submit-btn" class="submit-btn">Deposit Funds</button>
+            <div id="message-bar" class="message-bar" role="status" aria-live="polite"></div>
+          </form>
+        </div>
+
+        <!-- Right: Recent Activity Feed (Side-by-side) -->
+        <div class="activity-card">
+          <div class="section-header">
+            <h2 class="section-title">Recent Activity</h2>
+            <button type="button" id="clear-history-btn" class="clear-btn">Clear log</button>
+          </div>
+
+          <div class="transaction-list-container">
+            <ul id="transaction-list" class="transaction-list">
+              <!-- Populated dynamically via app.js -->
+            </ul>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <span>ABC Bank • Minimalist Edition • </span>
+      <button type="button" id="reset-app-btn" class="reset-link">Reset to default</button>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
