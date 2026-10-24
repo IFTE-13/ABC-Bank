@@ -49,7 +49,6 @@
   const amountInput = document.getElementById("amount-input");
   const noteInput = document.getElementById("note-input");
   const submitBtn = document.getElementById("submit-btn");
-  const messageBar = document.getElementById("message-bar");
   const txListEl = document.getElementById("transaction-list");
   const depositTab = document.getElementById("tab-deposit");
   const withdrawTab = document.getElementById("tab-withdraw");
@@ -58,6 +57,7 @@
   const resetAppBtn = document.getElementById("reset-app-btn");
 
   let currentMode = "deposit"; // 'deposit' or 'withdraw'
+  let buttonStateTimer = null;
 
   function loadState() {
     try {
@@ -122,7 +122,7 @@
     // 1. Balance
     balanceEl.textContent = formatter.format(state.balance);
 
-    // 2. Summary stats (preserve totals even if log is cleared)
+    // 2. Summary stats
     const totalDeposited = state.totalDeposits !== undefined ? state.totalDeposits : 1240;
     const totalWithdrawn = state.totalWithdrawals !== undefined ? state.totalWithdrawals : 0;
 
@@ -168,18 +168,37 @@
     });
   }
 
-  function showMessage(text, isError = false) {
-    messageBar.textContent = text;
-    messageBar.className = `message-bar ${isError ? "error" : "success"}`;
-    messageBar.style.display = "block";
+  function getDefaultButtonText() {
+    return currentMode === "deposit" ? "Deposit Funds" : "Withdraw Funds";
+  }
 
-    setTimeout(() => {
-      messageBar.style.display = "none";
-    }, 3200);
+  function setButtonState(text, type) {
+    if (buttonStateTimer) clearTimeout(buttonStateTimer);
+
+    submitBtn.classList.remove("btn-confirmed", "btn-alert");
+
+    if (type === "success") {
+      submitBtn.classList.add("btn-confirmed");
+      submitBtn.textContent = text;
+    } else if (type === "error") {
+      submitBtn.classList.add("btn-alert");
+      submitBtn.textContent = text;
+    } else {
+      submitBtn.textContent = getDefaultButtonText();
+      return;
+    }
+
+    buttonStateTimer = setTimeout(() => {
+      submitBtn.classList.remove("btn-confirmed", "btn-alert");
+      submitBtn.textContent = getDefaultButtonText();
+    }, 2200);
   }
 
   function setMode(mode) {
     currentMode = mode;
+    if (buttonStateTimer) clearTimeout(buttonStateTimer);
+    submitBtn.classList.remove("btn-confirmed", "btn-alert");
+
     if (mode === "deposit") {
       depositTab.classList.add("active");
       depositTab.setAttribute("aria-selected", "true");
@@ -235,7 +254,7 @@
     const note = noteInput.value.trim();
 
     if (isNaN(rawValue) || rawValue <= 0) {
-      showMessage("Please enter a valid positive amount.", true);
+      setButtonState("Enter a valid amount", "error");
       amountInput.focus();
       return;
     }
@@ -243,7 +262,7 @@
     const amount = Math.round(rawValue * 100) / 100;
 
     if (currentMode === "withdraw" && amount > state.balance) {
-      showMessage("Insufficient funds. Cannot withdraw more than balance.", true);
+      setButtonState("Insufficient funds", "error");
       amountInput.focus();
       return;
     }
@@ -276,19 +295,22 @@
     // Reset inputs
     amountInput.value = "";
     noteInput.value = "";
-    showMessage(`${currentMode === "deposit" ? "Deposited" : "Withdrawn"} ${formatter.format(amount)} successfully.`);
+
+    // Button changes color with confirmation text
+    const confirmMessage = currentMode === "deposit" 
+      ? `✓ Deposited ${formatter.format(amount)}` 
+      : `✓ Withdrawn ${formatter.format(amount)}`;
+    setButtonState(confirmMessage, "success");
   });
 
-  // Direct, reliable clear without blocking confirm popups
+  // Clear history
   clearHistoryBtn.addEventListener("click", () => {
     if (!state.transactions || state.transactions.length === 0) {
-      showMessage("Recent activity is already empty.");
       return;
     }
     state.transactions = [];
     saveState();
     renderDashboard();
-    showMessage("Recent activity log cleared.");
   });
 
   resetAppBtn.addEventListener("click", () => {
@@ -298,7 +320,7 @@
     state.user.isLoggedIn = true;
     saveState();
     renderDashboard();
-    showMessage("Account reset to default.");
+    setButtonState("Reset complete", "success");
   });
 
   // Init

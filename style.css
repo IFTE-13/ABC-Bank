@@ -539,7 +539,7 @@ body {
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  transition: opacity 0.15s ease;
+  transition: background-color 0.2s ease, color 0.2s ease, opacity 0.15s ease, transform 0.1s ease;
   margin-top: 2px;
 }
 
@@ -549,6 +549,16 @@ body {
 
 .submit-btn:active {
   transform: translateY(1px);
+}
+
+.submit-btn.btn-confirmed {
+  background: var(--income) !important;
+  color: #ffffff !important;
+}
+
+.submit-btn.btn-alert {
+  background: var(--expense) !important;
+  color: #ffffff !important;
 }
 
 /* Feedback alert */
